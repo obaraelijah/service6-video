@@ -4,6 +4,7 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 
 # ==============================================================================
 # Define dependencies
+
 GOLANG          := golang:1.24
 ALPINE          := alpine:3.22
 KIND            := kindest/node:v1.33.1
@@ -26,6 +27,22 @@ AUTH_IMAGE      := $(BASE_IMAGE_NAME)/$(AUTH_APP):$(VERSION)
 
 run:
 	go run apis/services/sales/main.go | go run apis/tooling/logfmt/main.go
+
+
+# ==============================================================================
+# Building containers
+
+build: sales 
+
+
+sales:
+	docker build \
+		-f zarf/docker/dockerfile.sales \
+		-t $(SALES_IMAGE) \
+		--build-arg BUILD_REF=$(VERSION) \
+		--build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+		.
+
 
 # ==============================================================================
 # Running from within k8s/kind
@@ -61,5 +78,4 @@ dev-status:
 
 tidy:
 	go mod tidy
-	
 	go mod vendor
