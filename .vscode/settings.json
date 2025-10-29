@@ -17,5 +17,6 @@
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#154b8e99",
     "titleBar.inactiveForeground": "#e7e7e799"
-  }
+  },
+  "editor.defaultFormatter": "golang.go"
 }
